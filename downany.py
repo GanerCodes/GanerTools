@@ -34,16 +34,24 @@ def download(link, args = "", baseDir = "download", cookies = "cookies.txt"):
         args = "video gallery wget"
     if "video" in args:
         print("Downloading as: video")
-        procs.append(("video", downloadYoutube(link, audioOnly = 0, noPlaylist = ("noplaylist" in args), folder = f"{baseFold}/video", cookies = cookies)))
+        try:
+            procs.append(("video", downloadYoutube(link, audioOnly = 0, noPlaylist = ("noplaylist" in args), folder = f"{baseFold}/video", cookies = cookies)))
+        except Exception: pass
     if "audio" in args:
         print("Downloading as: audio")
-        procs.append(("audio", downloadYoutube(link, audioOnly = 1, noPlaylist = ("noplaylist" in args), folder = f"{baseFold}/audio", cookies = cookies)))
+        try:
+            procs.append(("audio", downloadYoutube(link, audioOnly = 1, noPlaylist = ("noplaylist" in args), folder = f"{baseFold}/audio", cookies = cookies)))
+        except Exception: pass
     if "gallery" in args or "image" in args:
         print("Downloading as: gallery")
-        procs.append(("gallery", downloadGallery(link, folder = f"{baseFold}/gallery", cookies = cookies)))
+        try:
+            procs.append(("gallery", downloadGallery(link, folder = f"{baseFold}/gallery", cookies = cookies)))
+        except Exception: pass
     if "wget" in args or "file" in args:
         print("Downloading as: wget")
-        procs.append(("wget", downloadWget(link, folder = f"{baseFold}/wget", cookies = cookies)))
+        try:
+            procs.append(("wget", downloadWget(link, folder = f"{baseFold}/wget", cookies = cookies)))
+        except Exception: pass
     
     final = []
     for proc in procs:
