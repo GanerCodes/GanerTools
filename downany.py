@@ -49,7 +49,7 @@ def download(link, args = "", baseDir = "download", cookies = "cookies.txt"):
     for proc in procs:
         t, p = proc
         p[1].wait()
-        expectedDir = f"{baseFold}{p[0]}"
+        expectedDir = f"{baseFold}/{p[0]}"
         cond1 = cond2 = False
         if (cond1 := os.path.exists(expectedDir)) and (cond2 := len(dr := os.listdir(expectedDir))):
             final.append((t, p[1].returncode, f"{expectedDir}/{dr[0]}" if len(dr) == 1 else expectedDir))
