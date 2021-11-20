@@ -1,18 +1,58 @@
-#this is a mess
-
-import asyncio, aiohttp, discord, random, os, io
+from DownAny.downany import download
+import asyncio, requests, aiohttp, discord, random, os, io, threading
 from better_desmos_python import eqToPy
-token = "TOKEN"
 
+SAVE_PATH = "e/bruh/"
+
+token = open("token", 'r').read().strip()
 bot = discord.Client()
+rdy, msgque = False, []
+
+def convertPathToURL(path):
+    return requests.post("https://ganer.xyz/shortenURL", headers = {
+        "filename": "1",
+        "access": "asdf",
+        "url": f"/e/ganerTools/Download/{path}"
+    }).content
+
+def downloadProc(channel, link, args):
+    j = download(link, args, baseDir = SAVE_PATH)
+    sep = '\n\t'
+    msgque.append((channel, f"""\
+Downloaded "{link[:24] + ('…' if len(link) > 23 else '')}"!
+\t{sep.join(f"{i[0]} ({i[1]}): {convertPathToURL(i[2])}" for i in j)}"""))
+
+async def processMsgQue():
+    while True:
+        while len(msgque) > 0:
+            try:
+                m = msgque.pop()
+                await m[0].send(f"```{m[1]}```")
+            except Exception as e:
+                print(e)
+        await asyncio.sleep(2.5)
 
 @bot.event
 async def on_ready():
-    print("READY")
+    global rdy
+    if not rdy:
+        print("Ready")
+        bot.loop.create_task(processMsgQue())
+        rdy = True
 
 @bot.event
 async def on_message(msg):
     match msg.content.split(' '):
+        case "save", *x:
+            m = ' '.join(x)
+            spl = m.split('|')
+            if len(spl) == 0:
+                await msg.channel.send("Add a link dumbass")
+            else:
+                c = spl[1] if len(spl) > 1 else "video" 
+                for link in filter(None, spl[0].split(' ')):
+                    threading.Thread(target = downloadProc, args = (msg.channel, link, c)).start()
+                
         case "ptdfm", x:
             f = msg.attachments[0]
             await f.save(name := f"{str(random.random()).replace('.', '')}.txt")
