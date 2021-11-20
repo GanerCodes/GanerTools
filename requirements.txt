@@ -2,3 +2,5 @@ requests
 discord
 asyncio
 aiohttp
+gallery-dl
+yt-dlp
