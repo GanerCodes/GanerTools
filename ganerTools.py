@@ -58,7 +58,7 @@ async def on_message(msg):
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
-                c = spl[1] if len(spl) > 1 else "video" 
+                c = spl[1] if len(spl) > 1 else "video gallery" 
                 for link in filter(None, spl[0].split(' ')):
                     threading.Thread(target = downloadProc, args = (msg, link, c)).start()
                 
