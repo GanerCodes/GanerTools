@@ -9,6 +9,7 @@ discord_token = config['discord_token']
 access_token  = config['access_token']
 cookies_path  = config['cookies']
 
+if save_path[-1] != '/': save_path = save_path + '/'
 bot = discord.Client()
 rdy, msgque = False, []
 
