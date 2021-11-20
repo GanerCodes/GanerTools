@@ -23,9 +23,9 @@ def downloadWget(link, folder = "", cookies =  "cookies.txt"):
         "wget", "--load-cookies", cookies, "-c", "-nd", "-nv", "-P", f"{folder}", link
     ])))
 
-def download(link, args = "", baseDir = "download", cookies = "cookies.txt"):
+def download(link, args = "", baseDir = "download/", cookies = "cookies.txt"):
     args = list(filter(None, args.lower().split(' ')))
-    baseFold = f"{baseDir}/{(hsh := qsha(link)[:24])}"
+    baseFold = f"{baseDir}{(hsh := qsha(link)[:24])}"
     
     print(f'''Downloading "{link}" with args "{', '.join(args)}" to location "{baseFold}"''')
     procs = []
