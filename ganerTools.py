@@ -7,6 +7,7 @@ save_path     = config['save_path']
 valid_users   = config['downloader_valid_users']
 discord_token = config['discord_token']
 access_token  = config['access_token']
+cookies_path  = config['cookies']
 
 bot = discord.Client()
 rdy, msgque = False, []
@@ -19,7 +20,7 @@ def convertPathToURL(path):
     }).content.decode()
 
 def downloadProc(channel, link, args):
-    j = download(link, args, baseDir = save_path)
+    j = download(link, args, baseDir = save_path, cookies = cookies_path)
     sep = '\n\t'
     msgque.append((channel, f"""\
 Downloaded "{link[:24] + ('…' if len(link) > 23 else '')}"!
