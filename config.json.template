@@ -2,5 +2,6 @@
     "discord_token": "tokenHere",
     "access_token": "passwordHere",
     "save_path": "some/path/here",
+    "cookies_path": "cookies.txt",
     "downloader_valid_users": [123456789012345678]
 }
