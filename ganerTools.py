@@ -14,7 +14,7 @@ rdy, msgque = False, []
 
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
-        "localpath": "True",
+        "localpath": "true",
         "access": access_token,
         "url": f"/e/download/{path.lstrip(save_path)}"
     }).content.decode()
