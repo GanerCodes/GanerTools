@@ -53,7 +53,7 @@ def download(link, args = "", baseDir = "download", cookies = "cookies.txt"):
         if (cond1 := os.path.exists(expectedDir)) and (cond2 := len(dr := os.listdir(expectedDir))):
             final.append((t, p[1].returncode, f"{expectedDir}/{dr[0]}" if len(dr) == 1 else expectedDir))
         else:
-            print(f"Failed to download as {t} ({p[1].returncode}) (expectedDir={expectedDir}): {"No files found in directory" if cond2 else ("Created directroy, but no files found" if cond1 else "No directory created")}")
+            print(f"""Failed to download as {t} ({p[1].returncode}) (expectedDir={expectedDir}): {"No files found in directory" if cond2 else ("Created directroy, but no files found" if cond1 else "No directory created")}""")
     
     return final
 
