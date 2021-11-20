@@ -23,7 +23,7 @@ def downloadProc(channel, link, args):
     j = download(link, args, baseDir = save_path, cookies = cookies_path)
     sep = '\n\t'
     msgque.append((channel, f"""\
-Downloaded "{link[:24] + ('…' if len(link) > 23 else '')}"!
+Downloaded "`{link[:24] + ('…' if len(link) > 23 else '')}`"!
 \t{sep.join(f"{i[0]} ({i[1]}): {convertPathToURL(i[2])}" for i in j)}"""))
 
 async def processMsgQue():
@@ -31,7 +31,7 @@ async def processMsgQue():
         while len(msgque) > 0:
             try:
                 m = msgque.pop()
-                await m[0].send(f"```{m[1]}```")
+                await m[0].send(f"{m[1]}")
             except Exception as e:
                 print(e)
         await asyncio.sleep(2.5)
