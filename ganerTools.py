@@ -20,19 +20,19 @@ def convertPathToURL(path):
         "url": f"/e/download/{path.lstrip(save_path)}"
     }).content.decode()
 
-def downloadProc(channel, link, args):
+def downloadProc(msg, link, args):
     j = download(link, args, baseDir = save_path, cookies = cookies_path)
     sep = '\n\t'
-    msgque.append((channel, f"""\
+    msgque.append((msg, f"""\
 Downloaded "`{link[:24] + ('…' if len(link) > 23 else '')}`"!
-\t{sep.join(f"{i[0]} ({i[1]}): {convertPathToURL(i[2])}" for i in j)}"""))
+\t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j)}"""))
 
 async def processMsgQue():
     while True:
         while len(msgque) > 0:
             try:
                 m = msgque.pop()
-                await m[0].send(f"{m[1]}")
+                await m[0].channel.send(f"<@{m[0].author.id}> {m[1]}")
             except Exception as e:
                 print(e)
         await asyncio.sleep(2.5)
@@ -60,7 +60,7 @@ async def on_message(msg):
             else:
                 c = spl[1] if len(spl) > 1 else "video" 
                 for link in filter(None, spl[0].split(' ')):
-                    threading.Thread(target = downloadProc, args = (msg.channel, link, c)).start()
+                    threading.Thread(target = downloadProc, args = (msg, link, c)).start()
                 
         case "ptdfm", x:
             f = msg.attachments[0]
