@@ -14,9 +14,9 @@ rdy, msgque = False, []
 
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
-        "filename": "",
+        "filename": "True",
         "access": access_token,
-        "url": f"/e/ganerTools/Download/{path}"
+        "url": f"/e/GanerTools/download/{path}"
     }).content.decode()
 
 def downloadProc(channel, link, args):
