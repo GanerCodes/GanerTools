@@ -18,7 +18,7 @@ def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
         "localpath": "true",
         "access": access_token,
-        "url": f"/e/download/{path.lstrip(save_path)}"
+        "url": f"/e/download/{path.removeprefix(save_path)}"
     }).content.decode()
 
 def downloadProc(msg, link, args):
