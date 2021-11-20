@@ -1,5 +1,5 @@
 requests
-discord
+py-cord
 asyncio
 aiohttp
 gallery-dl

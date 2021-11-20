@@ -1,22 +1,25 @@
-from DownAny.downany import download
-import asyncio, requests, aiohttp, discord, random, os, io, threading
+from downany import download
+import asyncio, requests, aiohttp, json, discord, random, os, io, threading
 from better_desmos_python import eqToPy
 
-SAVE_PATH = "e/bruh/"
+config = json.load(open('config.json', 'r'))
+save_path     = config['save_path']
+valid_users   = config['downloader_valid_users']
+discord_token = config['discord_token']
+access_token  = config['access_token']
 
-token = open("token", 'r').read().strip()
 bot = discord.Client()
 rdy, msgque = False, []
 
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
-        "filename": "1",
-        "access": "asdf",
+        "filename": "",
+        "access": access_token,
         "url": f"/e/ganerTools/Download/{path}"
-    }).content
+    }).content.decode()
 
 def downloadProc(channel, link, args):
-    j = download(link, args, baseDir = SAVE_PATH)
+    j = download(link, args, baseDir = save_path)
     sep = '\n\t'
     msgque.append((channel, f"""\
 Downloaded "{link[:24] + ('…' if len(link) > 23 else '')}"!
@@ -44,6 +47,10 @@ async def on_ready():
 async def on_message(msg):
     match msg.content.split(' '):
         case "save", *x:
+            if msg.author.id not in valid_users:
+                await msg.channel.send("no")
+                return
+                
             m = ' '.join(x)
             spl = m.split('|')
             if len(spl) == 0:
@@ -101,6 +108,6 @@ async def on_message(msg):
                     async with session.get(resp) as resp2:
                         f = await resp2.read()
                         f = io.BytesIO(f)
-                        await msg.channel.send("fasdf", file = discord.File(f, filename = "image.png"))
+                        await msg.channel.send("** **", file = discord.File(f, filename = "image.png"))
 
-bot.run(token)
+bot.run(discord_token)

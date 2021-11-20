@@ -1,4 +1,5 @@
 token
 cookies.txt
+config.json
 download/*
 __pycache__/*
