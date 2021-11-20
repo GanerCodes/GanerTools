@@ -13,6 +13,7 @@ bot = discord.Client()
 rdy, msgque = False, []
 
 def convertPathToURL(path):
+    print(path.lstrip(save_path))
     return requests.post("https://ganer.xyz/shortenURL", headers = {
         "localpath": "true",
         "access": access_token,
