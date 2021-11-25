@@ -2,5 +2,5 @@
     "extractor": {
         "directory": []
     },
-    "filename": "{num}_{id}_{title:R /_/}({width}x{height}).{extension}"
+    "filename": "{num}_{id}_({width}x{height}).{extension}"
 }

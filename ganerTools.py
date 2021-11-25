@@ -26,7 +26,7 @@ def downloadProc(msg, link, args):
     j = download(link, args, baseDir = save_path, cookies = cookies_path)
     sep = '\n\t'
     msgque.append((msg, f"""\
-Downloaded "`{link[:24] + ('…' if len(link) > 23 else '')}`"!
+Downloaded "`{link[:24] + ('…' if len(link) > 23 else '')}`:"
 \t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j)}"""))
 
 async def processMsgQue():

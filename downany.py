@@ -10,7 +10,7 @@ def downloadYoutube(link, noPlaylist = False, audioOnly = False, folder = "", co
     return (folder, Popen(collapseList([
         "yt-dlp", ['-x', "--audio-format", "mp3"] if audioOnly else ["--merge-output-format", "mp4"], "--no-progress", "--embed-thumbnail",
         "--no-post-overwrites", "-ciw", ["--no-playlist"] if noPlaylist else [], "--cookies", cookies, "--restrict-filenames",
-        "-o", f"{folder}/%(playlist_index)s_%(title)s_%(id)s.%(ext)s", link
+        "-o", f"{folder}/%(playlist_index)s_%(id)s.%(ext)s", link
     ])))
 
 def downloadGallery(link, folder = "", cookies = "cookies.txt"):
