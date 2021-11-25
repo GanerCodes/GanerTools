@@ -60,7 +60,7 @@ async def on_message(msg):
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
-                c = spl[1] if len(spl) == 1 else "video gallery"
+                c = spl[1] if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}``:"
                 counter = 0
                 for link in splitDelims(spl[0], "\n "):
