@@ -13,6 +13,8 @@ if save_path[-1] != '/': save_path = save_path + '/'
 bot = discord.Client()
 rdy, msgque = False, []
 
+splitDelims = lambda x, s: list(filter(None, x.split(s[0]))) if len(s) == 1 else splitDelims(s[-1].join(x.split(s[0])), s[1:])
+
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
         "localpath": "true",
@@ -54,12 +56,12 @@ async def on_message(msg):
                 return
                 
             m = ' '.join(x)
-            spl = m.split('|')
+            spl = m.split('|', 1)
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
-                c = spl[1] if len(spl) > 1 else "video gallery" 
-                for link in filter(None, spl[0].split(' ')):
+                c = spl[1] if len(spl) == 1 else "video gallery"
+                for link in splitDelims(spl[0], "\n "):
                     threading.Thread(target = downloadProc, args = (msg, link, c)).start()
                 
         case "ptdfm", x:

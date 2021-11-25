@@ -14,14 +14,14 @@ def downloadYoutube(link, noPlaylist = False, audioOnly = False, folder = "", co
     ])))
 
 def downloadGallery(link, folder = "", cookies = "cookies.txt"):
-    return (folder, Popen(collapseList([
+    return (folder, Popen([
         "gallery-dl", "--config", "gallery_dl.json", "--cookies", cookies, "-o", f"base-directory={folder}", link
-    ])))
+    ]))
 
 def downloadWget(link, folder = "", cookies =  "cookies.txt"):
-    return (folder, Popen(collapseList([
+    return (folder, Popen([
         "wget", "--load-cookies", cookies, "-c", "-nd", "-nv", "-P", f"{folder}", link
-    ])))
+    ]))
 
 def download(link, args = "", baseDir = "download/", cookies = "cookies.txt"):
     args = list(filter(None, args.lower().split(' ')))
