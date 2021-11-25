@@ -61,9 +61,10 @@ async def on_message(msg):
                 await msg.channel.send("Add a link dumbass")
             else:
                 c = spl[1] if len(spl) == 2 else "video gallery"
-                rMsg = f"Downloading with parameters `{c}``:"
+                rMsg = f"Downloading with parameters `{c}`:"
                 counter = 0
                 for link in splitDelims(spl[0], "\n "):
+                    link = link.strip()
                     counter += 1
                     rMsg += f'''\n{counter}. `{link}`'''
                     threading.Thread(target = downloadProc, args = (msg, link, c)).start()
