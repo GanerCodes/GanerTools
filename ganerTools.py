@@ -29,8 +29,8 @@ def convertPathToURL(path):
         "url": f"/e/download/{path.removeprefix(save_path)}"
     }).content.decode()
 
-def downloadProc(msg, link, args):
-    j = download(link, args, baseDir = save_path, cookies = cookies_path)
+def downloadProc(msg, link, args, move_folder = None):
+    j = download(link, args, baseDir = save_path, cookies = cookies_path, move_folder = move_folder)
     sep = '\n\t'
     msgque.append((msg, f"""\
 Download result "`{link[:50] + ('…' if len(link) > 49 else '')}`:"
@@ -71,12 +71,11 @@ async def on_message(msg):
                 c = spl[1] if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}` into folder `{redirfold}`:"
                 counter = 0
-                # HERE
                 for link in get_urls(spl[0]):
                     link = link.strip()
                     counter += 1
                     rMsg += f'''\n{counter}. {link}'''
-                    threading.Thread(target = downloadProc, args = (msg, link, c)).start()
+                    threading.Thread(target = downloadProc, args = (msg, link, c), kwargs = {"move_folder": redirfold}).start()
                 await msg.reply(rMsg)
                 
         case "ptdfm", x:
