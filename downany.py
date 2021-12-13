@@ -1,4 +1,4 @@
-import random, shutil, os
+import random, string, shutil, os
 from subprocess import Popen
 from hashlib import sha256
 
