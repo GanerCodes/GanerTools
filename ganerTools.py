@@ -1,6 +1,13 @@
 from downany import download
-import asyncio, requests, aiohttp, json, discord, random, os, io, threading
+import asyncio, requests, aiohttp, json, discord, random, os, re, io, threading
 from better_desmos_python import eqToPy
+
+url_regex = re.compile(
+    r"([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?",
+    re.MULTILINE
+) # https://stackoverflow.com/a/63022807/14501641
+
+get_urls = lambda s: list(map(lambda x: x.group(), url_regex.finditer(s)))
 
 config = json.load(open('config.json', 'r'))
 save_path     = config['save_path']
@@ -63,13 +70,13 @@ async def on_message(msg):
                 c = spl[1] if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}`:"
                 counter = 0
-                for link in splitDelims(spl[0], "\n "):
+                # HERE
+                for link in get_urls(spl[0]):
                     link = link.strip()
                     counter += 1
                     rMsg += f'''\n{counter}. `{link}`'''
                     threading.Thread(target = downloadProc, args = (msg, link, c)).start()
                 await msg.reply(rMsg)
-                
                 
         case "ptdfm", x:
             f = msg.attachments[0]
