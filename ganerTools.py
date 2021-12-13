@@ -14,7 +14,7 @@ save_path     = config['save_path']
 valid_users   = config['downloader_valid_users']
 discord_token = config['discord_token']
 access_token  = config['access_token']
-cookies_path  = config['cookies']
+cookies_path  = config['cookies'] if 'cookies' in config else ''
 
 if save_path[-1] != '/': save_path = save_path + '/'
 bot = discord.Client()
@@ -67,14 +67,15 @@ async def on_message(msg):
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
+                redirfold = redirfoldspl[-1] if len(redirfoldspl := spl[-1].split('>>')) > 1 else "ganerTools"
                 c = spl[1] if len(spl) == 2 else "video gallery"
-                rMsg = f"Downloading with parameters `{c}`:"
+                rMsg = f"Downloading with parameters `{c}` into folder `{redirfold}`:"
                 counter = 0
                 # HERE
                 for link in get_urls(spl[0]):
                     link = link.strip()
                     counter += 1
-                    rMsg += f'''\n{counter}. `{link}`'''
+                    rMsg += f'''\n{counter}. {link}'''
                     threading.Thread(target = downloadProc, args = (msg, link, c)).start()
                 await msg.reply(rMsg)
                 

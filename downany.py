@@ -23,7 +23,7 @@ def downloadWget(link, folder = "", cookies =  "cookies.txt"):
         "wget", "--load-cookies", cookies, "-c", "-nd", "-nv", "-P", f"{folder}", link
     ]))
 
-def download(link, args = "", baseDir = "download/", cookies = "cookies.txt"):
+def download(link, args = "", baseDir = "download/", cookies = "cookies.txt", move_folder = None):
     args = list(filter(None, args.lower().split(' ')))
     baseFold = f"{baseDir}{(hsh := qsha(link)[:24])}"
     
@@ -60,7 +60,16 @@ def download(link, args = "", baseDir = "download/", cookies = "cookies.txt"):
         expectedDir = p[0]
         cond1 = cond2 = False
         if (cond1 := os.path.exists(expectedDir)) and (cond2 := len(dr := os.listdir(expectedDir))):
-            final.append((t, p[1].returncode, f"{expectedDir}/{dr[0]}" if len(dr) == 1 else expectedDir))
+            located_filepath = f"{expectedDir}/{dr[0]}" if len(dr) == 1 else expectedDir
+            if move_folder:
+                if not os.path.isdir(move_folder):
+                    os.mkdir(move_folder)
+                located_dir, located_filename = os.path.split(located_filepath)
+                new_filepath = f"{move_folder}/{located_filename}"
+                if not os.path.isfile(new_filepath):
+                    os.rename(located_filepath, new_filepath)
+                located_filepath = new_filepath
+            final.append((t, p[1].returncode, located_filepath))
         else:
             print(f"""Failed to download as {t} ({p[1].returncode}) (expectedDir={expectedDir}): {"No files found in directory" if cond2 else ("Created directroy, but no files found" if cond1 else "No directory created")}""")
     
