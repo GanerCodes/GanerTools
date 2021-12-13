@@ -67,8 +67,8 @@ async def on_message(msg):
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
-                redirfold = f"""{save_path}/{redirfoldspl[-1] if len(redirfoldspl := spl[-1].split('>>')) > 1 else "ganerTools"}"""
-                c = spl[1] if len(spl) == 2 else "video gallery"
+                redirfold = f"""{save_path}{redirfoldspl[-1].strip() if len(redirfoldspl := spl[-1].split('>>')) > 1 else "ganerTools"}"""
+                c = spl[1].strip() if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}` into folder `{redirfold}`:"
                 counter = 0
                 for link in get_urls(spl[0]):

@@ -1,4 +1,4 @@
-import os
+import shutil, os
 from subprocess import Popen
 from hashlib import sha256
 
@@ -66,8 +66,11 @@ def download(link, args = "", baseDir = "download/", cookies = "cookies.txt", mo
                     os.mkdir(move_folder)
                 located_dir, located_filename = os.path.split(located_filepath)
                 new_filepath = f"{move_folder}/{located_filename}"
-                if not os.path.isfile(new_filepath):
-                    os.rename(located_filepath, new_filepath)
+                if os.path.isfile(new_filepath) or os.path.isdir(new_filepath):
+                    old_filepath = new_filepath
+                    new_filepath = f"{move_folder}/{''.join(random.choice(string.ascii_letters) for i in range(12))}_{located_filename}"
+                    print(f'Using name "{new_filepath}" as "{old_filepath}" already exists')
+                shutil.move(located_filepath, new_filepath)
                 located_filepath = new_filepath
             final.append((t, p[1].returncode, located_filepath))
         else:
