@@ -67,7 +67,7 @@ async def on_message(msg):
             if len(spl) == 0:
                 await msg.channel.send("Add a link dumbass")
             else:
-                redirfold = redirfoldspl[-1] if len(redirfoldspl := spl[-1].split('>>')) > 1 else "ganerTools"
+                redirfold = f"""{save_path}/{redirfoldspl[-1] if len(redirfoldspl := spl[-1].split('>>')) > 1 else "ganerTools"}"""
                 c = spl[1] if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}` into folder `{redirfold}`:"
                 counter = 0
