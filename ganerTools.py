@@ -34,7 +34,7 @@ def downloadProc(msg, link, args):
     sep = '\n\t'
     msgque.append((msg, f"""\
 Download result "`{link[:50] + ('…' if len(link) > 49 else '')}`:"
-\t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j if len(j) else 'No download results.')}"""))
+\t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j) if len(j) else 'No download results.'}"""))
 
 async def processMsgQue():
     while True:
