@@ -2,5 +2,5 @@
     "extractor": {
         "directory": []
     },
-    "filename": "{index}_{num}_{id}_({width}x{height}).{extension}"
+    "filename": "{page}_{index}_{num}_{id}_{manga_id}_{chapter_id}_({width}_{height}).{extension}"
 }
