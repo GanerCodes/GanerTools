@@ -15,7 +15,7 @@ def downloadYoutube(link, noPlaylist = False, audioOnly = False, folder = "", co
 
 def downloadGallery(link, folder = "", cookies = "cookies.txt"):
     return (folder, Popen([
-        "gallery-dl", "--config", "gallery_dl.json", "--cookies", cookies, "-o", f"base-directory={folder}", link
+        "gallery-dl", "--verbose", "--config", "gallery_dl.json", "--cookies", cookies, "-o", f"base-directory={folder}", link
     ]))
 
 def downloadWget(link, folder = "", cookies =  "cookies.txt"):
