@@ -2,5 +2,5 @@
     "extractor": {
         "directory": []
     },
-    "filename": "{num}_{date!T}_{title}_{id}_{image-id}_({width}x{height}).{extension}"
+    "filename": "{index}_{num}_{id}_({width}x{height}).{extension}"
 }
