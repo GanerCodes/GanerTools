@@ -23,7 +23,7 @@ rdy, msgque = False, []
 splitDelims = lambda x, s: list(filter(None, x.split(s[0]))) if len(s) == 1 else splitDelims(s[-1].join(x.split(s[0])), s[1:])
 
 def makeSafeFilepath(filename):
-    return ''.join(filter(lambda c: c.isalpha() or c.isdigit() or c == ' ', filename)).strip().replace(' ', '_') or "ganerTools"
+    return ''.join(map(lambda c: '_' if c.isalpha() or c.isdigit() or c == ' ' else c, filename)).strip() or "ganerTools"
 
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
