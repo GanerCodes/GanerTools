@@ -23,7 +23,7 @@ rdy, msgque = False, []
 splitDelims = lambda x, s: list(filter(None, x.split(s[0]))) if len(s) == 1 else splitDelims(s[-1].join(x.split(s[0])), s[1:])
 
 def makeSafeFilepath(filename):
-    return ''.join(map(lambda c: '_' if c.isalpha() or c.isdigit() or c == ' ' else c, filename)).strip() or "ganerTools"
+    return ''.join(map(lambda c: c if c.isalpha() or c.isdigit() else '_', filename)).strip() or "ganerTools"
 
 def convertPathToURL(path):
     return requests.post("https://ganer.xyz/shortenURL", headers = {
@@ -71,7 +71,8 @@ async def on_message(msg):
                 await msg.channel.send("Add a link dumbass")
             else:
                 channelName = msg.channel.name
-                redirfold = f"""{save_path}{redirfoldspl[-1].strip() if len(redirfoldspl := spl[-1].split('>>')) > 1 else f"{makeSafeFilepath(channelName)}"}"""
+                folder_name = redirfoldspl[-1].strip() if len(redirfoldspl := spl[-1].split('>>')) > 1 else f"{makeSafeFilepath(channelName)}"
+                redirfold = f"""{save_path}{folder_name}"""
                 c = spl[1].strip() if len(spl) == 2 else "video gallery"
                 rMsg = f"Downloading with parameters `{c}` into folder `{redirfold}`:"
                 counter = 0
