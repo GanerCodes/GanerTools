@@ -29,6 +29,7 @@ def eqToPy(s):
     s = s.replace(r'\pi', 'π')
     s = s.replace(r'\operatorname{mod}', r'\math.fmod')
     s = s.replace(r'\operatorname{abs}', r'\abs')
+    s = s.replace(r'\cdot', '*')
 
     letters = string.ascii_lowercase + string.ascii_uppercase + 'π'
     numbers = string.digits
@@ -112,7 +113,7 @@ def eqToPy(s):
     s = s.replace('π', 'math.pi').replace('cos(', 'math.cos(').replace('sin(', 'math.sin(')
     s = s.replace(']', '-1]')
     s = s.replace('.x', '[0]').replace('.y', '[1]')
-    
+    s = re.sub(r"[0-9]\(|\)[0-9]", lambda m: f"{m.group(0)[0]}*{m.group(0)[1]}", s)
     s = functionPrefix + s
     return s
 

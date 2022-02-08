@@ -3,7 +3,7 @@ import asyncio, requests, aiohttp, json, discord, random, os, re, io, threading
 from better_desmos_python import eqToPy
 
 url_regex = re.compile(
-    r"([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?",
+    r"(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?",
     re.MULTILINE
 ) # https://stackoverflow.com/a/63022807/14501641
 
