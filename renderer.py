@@ -25,7 +25,7 @@ class Renderer(moderngl_window.WindowConfig):
                     {Renderer.shader}"""
             ),
             self.ctx.buffer(
-                np.array([-1,-1,-1,1,1,-1,1,1]).astype('f4')),
+                np.array([0,0,0,1,1,0,1,1]).astype('f4')),
             'in_vert')
     
     def __init__(self, **kwargs):
@@ -77,17 +77,7 @@ vec2 ptc(float d,float a){return vec2(d*cos(a),d*sin(a));}
 vec3 hsv(vec3 c){vec4 K=vec4(0.0,-1.0/3.0,2.0/3.0,-1.0),p=mix(vec4(c.bg,K.ab),vec4(c.gb,K.rg),step(c.b,c.g)),q=mix(vec4(p.rga,c.r),vec4(c.r,p.gbr),step(p.r,c.r));float d=q.r-min(q.a,q.g),e=1e-10;return vec3(abs(q.b+(q.a-q.g)/(6.0*d+e)),d/(q.r+e),q.r);}
 vec3 rgb(vec3 c){vec4 K=vec4(1.0,0.66666,0.33333,3.0);vec3 p=abs(fract(c.rrr+K.rgb)*6.0-K.aaa);return c.b*mix(K.rrr,p-K.rrr,c.g);}"""
 
-# Renderer.exec(parse_shader("""
-
-# f add2(f x) {ret x + 2.0;}
-
+# Renderer.exec("""
 # MAIN:
-# ret v4(
-#         v3(
-#             add2(
-#                 length(pos)
-#             ) <= 2.5 ? 1 : 0
-#         ),
-#     1);
-
-# """), "output.png")
+# ret v4(abs(p.x),abs(p.y),0,1);
+# """, "output.png")
