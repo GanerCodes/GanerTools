@@ -47,6 +47,7 @@ class Renderer(moderngl_window.WindowConfig):
     def exec(shader, filename="output.png"):
         Renderer.filename = filename
         Renderer.shader = Renderer.parse_shader(shader)
+        print(Renderer.shader)
         moderngl_window.run_window_config(Renderer)
     
     def render(self, time, frame_time):
