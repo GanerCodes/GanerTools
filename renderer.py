@@ -1,6 +1,9 @@
 import numpy as np
 from PIL import Image
 import moderngl_window, moderngl
+import os
+
+os.environ['DISPLAY'] = ':0'
 
 class Renderer(moderngl_window.WindowConfig):
     window_size = 1920, 1080

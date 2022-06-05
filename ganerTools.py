@@ -100,7 +100,7 @@ async def on_message(msg):
                 else:
                     j = True
                 if j or p == len(content) - 1:
-                    l += ['```' + x + '\n' + t + '```']
+                    l += ['```' + x + '\n' + t + '```'] 
                     t = ""
                 p += 1
             for i in l:
@@ -110,9 +110,10 @@ async def on_message(msg):
             x = ' '.join(x).strip('`')
             await msg.channel.send(f"```py\n{eqToPy(x)}```")
         case "render", *x:
-            x = ' '.join(x).strip('`')
+            x = ' '.join(x).strip().strip('`').strip()
             Renderer.exec(x, name := f"{msg.id}.png")
-            await msg.channel.send("Your rendering, sire.", file = discord.File(name, filename = f"render_{name}"))
+            await msg.channel.send("Your rendering, sire.",
+                file = discord.File(name, filename = f"render_{name}"))
         case "tex", *x:
             dat = {
                 "formula": ' '.join(x).strip('`'),
