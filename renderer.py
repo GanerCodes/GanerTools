@@ -55,9 +55,9 @@ class Renderer(moderngl_window.WindowConfig):
         self.vao.render(mode=moderngl.TRIANGLE_STRIP)
         self.ctx.finish()
 
-        image = Image.frombytes('RGBA',
+        image = Image.frombytes('RGB',
             Renderer.window_size,
-            self.wnd.fbo.read(components=4))
+            self.wnd.fbo.read(components=3))
         image.save(Renderer.filename, format='png')
 
         self.wnd.close()
@@ -79,7 +79,7 @@ vec2 ptc(float d,float a){return vec2(d*cos(a),d*sin(a));}
 vec3 hsv(vec3 c){vec4 K=vec4(0.0,-1.0/3.0,2.0/3.0,-1.0),p=mix(vec4(c.bg,K.ab),vec4(c.gb,K.rg),step(c.b,c.g)),q=mix(vec4(p.rga,c.r),vec4(c.r,p.gbr),step(p.r,c.r));float d=q.r-min(q.a,q.g),e=1e-10;return vec3(abs(q.b+(q.a-q.g)/(6.0*d+e)),d/(q.r+e),q.r);}
 vec3 rgb(vec3 c){vec4 K=vec4(1.0,0.66666,0.33333,3.0);vec3 p=abs(fract(c.rrr+K.rgb)*6.0-K.aaa);return c.b*mix(K.rrr,p-K.rrr,c.g);}"""
 
-Renderer.exec("""
-MAIN:
-ret v4(abs(p.x),abs(p.y),0,1);
-""", "output.png")
+# Renderer.exec("""
+# MAIN:
+# ret v4(abs(p.x),abs(p.y),0,1);
+# """, "output.png")
