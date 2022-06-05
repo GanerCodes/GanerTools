@@ -51,11 +51,13 @@ class Renderer(moderngl_window.WindowConfig):
         moderngl_window.run_window_config(Renderer)
     
     def render(self, time, frame_time):
-        self.ctx.clear(*[0]*4)
+        self.ctx.clear(0, 0, 0)
         self.vao.render(mode=moderngl.TRIANGLE_STRIP)
         self.ctx.finish()
 
-        image = Image.frombytes('RGBA', Renderer.window_size, self.wnd.fbo.read(components=4))
+        image = Image.frombytes('RGBA',
+            Renderer.window_size,
+            self.wnd.fbo.read(components=4))
         image.save(Renderer.filename, format='png')
 
         self.wnd.close()
