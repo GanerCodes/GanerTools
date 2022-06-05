@@ -1,4 +1,5 @@
 from downany import download
+from renderer import Renderer
 import asyncio, requests, aiohttp, json, discord, random, os, re, io, threading
 from better_desmos_python import eqToPy
 
@@ -82,7 +83,6 @@ async def on_message(msg):
                     rMsg += f'''\n{counter}. {link}'''
                     threading.Thread(target = downloadProc, args = (msg, link, c), kwargs = {"move_folder": redirfold}).start()
                 await msg.reply(rMsg)
-                
         case "ptdfm", x:
             f = msg.attachments[0]
             await f.save(name := f"{str(random.random()).replace('.', '')}.txt")
@@ -109,6 +109,10 @@ async def on_message(msg):
         case "desmos", *x:
             x = ' '.join(x).strip('`')
             await msg.channel.send(f"```py\n{eqToPy(x)}```")
+        case "render", *x:
+            x = ' '.join(x).strip('`')
+            Renderer.exec(x, name := f"{msg.id}.png")
+            await msg.channel.send("Your rendering, sire.", file = discord.File(name, filename = f"render_{name}"))
         case "tex", *x:
             dat = {
                 "formula": ' '.join(x).strip('`'),
