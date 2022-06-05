@@ -33,6 +33,7 @@ class Renderer(moderngl_window.WindowConfig):
         self.generate_vao()
     
     def exec(shader, filename="output.png"):
+        print(shader)
         Renderer.filename = filename
         Renderer.shader = shader
         moderngl_window.run_window_config(Renderer)
