@@ -6,7 +6,7 @@ import os
 os.environ['DISPLAY'] = ':0'
 
 vertex_shader = """\
-#version 150
+#version 330
 in vec2 in_vert;
 out vec2 pos;
 void main() {
@@ -14,7 +14,7 @@ void main() {
     pos = in_vert;
 }"""
 
-fragment_shader = "#version 150\nin vec2 pos;\n{}"
+fragment_shader = "#version 330\nin vec2 pos;\n{}"
 
 class Renderer(moderngl_window.WindowConfig):
     window_size = 1024, 1024
