@@ -36,6 +36,7 @@ class Renderer(moderngl_window.WindowConfig):
             'in_vert')
     
     def __init__(self, **kwargs):
+        kwargs['ctx'] = moderngl.create_context(standalone=True, backend='egl')
         super().__init__(**kwargs)
         self.generate_vao()
     
@@ -57,7 +58,7 @@ class Renderer(moderngl_window.WindowConfig):
         moderngl_window.run_window_config(Renderer)
     
     def render(self, time, frame_time):
-        # self.ctx.clear(0, 0, 0, 0)
+        self.ctx.clear(0, 0, 0, 0)
         self.vao.render(mode=moderngl.TRIANGLES)
         self.ctx.finish()
 
