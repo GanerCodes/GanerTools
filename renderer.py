@@ -25,7 +25,7 @@ class Renderer(moderngl_window.WindowConfig):
                     {Renderer.shader}"""
             ),
             self.ctx.buffer(
-                np.array([-1,-1,-1,1,1,-1,1,1]).astype('f4')),
+                np.array([0,0,0,1,1,0,1,1]).astype('f4')),
             'in_vert')
     
     def __init__(self, **kwargs):
