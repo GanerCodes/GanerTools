@@ -6,7 +6,7 @@ import os
 os.environ['DISPLAY'] = ':0'
 
 class Renderer(moderngl_window.WindowConfig):
-    window_size = 1920, 1080
+    window_size = 1024, 1024
     aspect_ratio = 1
     def generate_vao(self):
         self.vao = self.ctx.simple_vertex_array(
