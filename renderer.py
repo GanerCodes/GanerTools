@@ -25,7 +25,13 @@ class Renderer(moderngl_window.WindowConfig):
                     {Renderer.shader}"""
             ),
             self.ctx.buffer(
-                np.array([0,0,0,1,1,0,1,1]).astype('f4')),
+                np.array([ 1, 1,
+                          -1, 1,
+                          -1,-1,
+                           
+                           1, 1,
+                           1,-1,
+                          -1,-1]).astype('f4')),
             'in_vert')
     
     def __init__(self, **kwargs):
@@ -51,7 +57,7 @@ class Renderer(moderngl_window.WindowConfig):
     
     def render(self, time, frame_time):
         self.ctx.clear(0, 0, 0, 0)
-        self.vao.render(mode=moderngl.TRIANGLE_STRIP)
+        self.vao.render(mode=moderngl.TRIANGLES)
         self.ctx.finish()
 
         image = Image.frombytes('RGBA',
