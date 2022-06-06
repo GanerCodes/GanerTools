@@ -1,6 +1,6 @@
-import numpy as np
+import moderngl
+from array import array
 from PIL import Image
-import moderngl_window, moderngl
 import os
 
 os.environ['DISPLAY'] = ':0'
@@ -25,66 +25,44 @@ vec3 rgb(vec3 c){vec4 K=vec4(1.0,0.66666,0.33333,3.0);vec3 p=abs(fract(c.rrr+K.r
 vertex_shader = """\
 #version 330
 in vec2 in_vert;
-out vec2 pos;
 void main() {
     gl_Position = vec4(in_vert, 0.0, 1.0);
-    pos = in_vert;
 }"""
 
-fragment_shader = "#version 330\nin vec2 pos;\n{}"
+def parse_shader(q, size):
+    return f"""\
+#version 330
+#define HALF_RES vec2({0.5*size[0]}, {0.5*size[1]})
+#define TWO_INV_MIN_RES {2.0/min(size)}
+{BLOCK}\n
+{q[:(l:=q.find('MAIN:'))]}\n
+out vec4 fragColor;
+vec3 func(vec2 p) {{
+    {q[l+5:]}
+}}
+void main() {{
+    gl_FragColor = vec4(func(TWO_INV_MIN_RES*(gl_FragCoord.xy - HALF_RES)), 1.0);
+}}"""
 
-class Renderer(moderngl_window.WindowConfig):
-    window_size = 1024, 1024
-    aspect_ratio = 1
-    def generate_vao(self):
-        self.vao = self.ctx.simple_vertex_array(
-            self.ctx.program(
-                vertex_shader=vertex_shader,
-                fragment_shader=fragment_shader.format(Renderer.shader)),
-            
-            self.ctx.buffer(
-                np.array([ 1, 1,
-                          -1, 1,
-                          -1,-1,
-                           
-                           1, 1,
-                           1,-1,
-                          -1,-1]).astype('f4')),
-            'in_vert')
+def render(shader, filename="output.png", size=(1000, 1000)):
+    shader = parse_shader(shader, size)
     
-    def __init__(self, **kwargs):
-        kwargs['ctx'] = moderngl.create_context(standalone=True, backend='egl')
-        super().__init__(**kwargs)
-        self.generate_vao()
-    
-    def parse_shader(q):
-        body = f"""\
-        vec4 func(vec2 p) {{
-            {q[(l:=q.find('MAIN:'))+5:]}
-        }}
-        void main() {{
-            gl_FragColor = func(pos);
-        }}"""
-        head = q[:l]
+    ctx = moderngl.create_context(standalone=True, backend='egl')
+    fbo = ctx.simple_framebuffer(size)
+    fbo.use()
 
-        return f"""{BLOCK}\n{head}\n{body}"""
-    
-    def exec(shader, filename="output.png"):
-        Renderer.filename = filename
-        Renderer.shader = Renderer.parse_shader(shader)
-        moderngl_window.run_window_config(Renderer)
-    
-    def render(self, time, frame_time):
-        self.ctx.clear(0, 0, 0, 0)
-        self.vao.render(mode=moderngl.TRIANGLES)
-        self.ctx.finish()
+    vao = ctx.vertex_array(ctx.program(
+        vertex_shader=vertex_shader,
+        fragment_shader=shader
+    ), ctx.buffer(data=array('f', [1,1,-1,1,-1,-1,1,1,1,-1,-1,-1])), "in_vert")
 
-        image = Image.frombytes('RGBA',
-            Renderer.window_size,
-            self.wnd.fbo.read(components=4))
-        image.save(Renderer.filename, format='png')
+    fbo.clear()
+    vao.render(mode=moderngl.TRIANGLES)
 
-        self.wnd.close()
+    image = Image.frombytes('RGBA', fbo.size, fbo.read(components=4))
+    image.save(filename, format='png')
+
+    ctx.release()
 
 if __name__ == "__main__":
-    Renderer.exec("MAIN:\nreturn vec4(abs(p.x),abs(p.y),0,1);", "output.png")
+    render("MAIN:\nret v3(abs(p.x),abs(p.y),0);", "output.png")

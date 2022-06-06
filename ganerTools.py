@@ -1,5 +1,5 @@
 from downany import download
-from renderer import Renderer
+from renderer import render
 import asyncio, requests, aiohttp, json, discord, random, os, re, io, threading
 from better_desmos_python import eqToPy
 
@@ -110,7 +110,7 @@ async def on_message(msg):
             await msg.channel.send(f"```py\n{eqToPy(x)}```")
         case "render", *x:
             x = ' '.join(x).strip().strip('`').strip()
-            Renderer.exec(x, name := f"{msg.id}.png")
+            render(x, name := f"{msg.id}.png")
             await msg.channel.send("Your rendering, sire.",
                 file = discord.File(name,
                     filename = f"render_{name}"))
