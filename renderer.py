@@ -5,25 +5,26 @@ import os
 
 os.environ['DISPLAY'] = ':0'
 
+vertex_shader = """\
+#version 150
+in vec2 in_vert;
+out vec2 pos;
+void main() {
+    gl_Position = vec4(in_vert, 0.0, 1.0);
+    pos = in_vert;
+}"""
+
+fragment_shader = "#version 150\nin vec2 pos;\n{}"
+
 class Renderer(moderngl_window.WindowConfig):
     window_size = 1024, 1024
     aspect_ratio = 1
     def generate_vao(self):
         self.vao = self.ctx.simple_vertex_array(
             self.ctx.program(
-                vertex_shader="""\
-                    #version 400
-                    in vec2 in_vert;
-                    out vec2 pos;
-                    void main() {
-                        gl_Position = vec4(in_vert, 0.0, 1.0);
-                        pos = in_vert;
-                    }""",
-                fragment_shader=f"""\
-                    #version 400
-                    in vec2 pos;
-                    {Renderer.shader}"""
-            ),
+                vertex_shader=vertex_shader,
+                fragment_shader=fragment_shader.format(Renderer.shader)),
+            
             self.ctx.buffer(
                 np.array([ 1, 1,
                           -1, 1,
@@ -56,7 +57,7 @@ class Renderer(moderngl_window.WindowConfig):
         moderngl_window.run_window_config(Renderer)
     
     def render(self, time, frame_time):
-        self.ctx.clear(0, 0, 0, 0)
+        # self.ctx.clear(0, 0, 0, 0)
         self.vao.render(mode=moderngl.TRIANGLES)
         self.ctx.finish()
 
