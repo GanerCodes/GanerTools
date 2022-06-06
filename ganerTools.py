@@ -65,7 +65,6 @@ async def on_message(msg):
             if msg.author.id not in valid_users:
                 await msg.channel.send("no")
                 return
-                
             m = ' '.join(x)
             spl = m.split('|', 1)
             if len(spl) == 0:
@@ -113,7 +112,8 @@ async def on_message(msg):
             x = ' '.join(x).strip().strip('`').strip()
             Renderer.exec(x, name := f"{msg.id}.png")
             await msg.channel.send("Your rendering, sire.",
-                file = discord.File(name, filename = f"render_{name}"))
+                file = discord.File(name, filename = (fn := f"render_{name}")))
+                os.remove(fn)
         case "tex", *x:
             dat = {
                 "formula": ' '.join(x).strip('`'),
