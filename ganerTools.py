@@ -113,8 +113,8 @@ async def on_message(msg):
             Renderer.exec(x, name := f"{msg.id}.png")
             await msg.channel.send("Your rendering, sire.",
                 file = discord.File(name,
-                    filename = (fn := f"render_{name}")))
-            os.remove(fn)
+                    filename = f"render_{name}"))
+            os.remove(name)
         case "tex", *x:
             dat = {
                 "formula": ' '.join(x).strip('`'),
