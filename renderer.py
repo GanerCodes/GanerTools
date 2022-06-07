@@ -19,8 +19,15 @@ float angle(vec2 p){return atan(p.g,p.r);}
 float angle_between(vec2 p1,vec2 p2){return atan(p2.g-p1.g,p2.r-p1.r);}
 float pml(float x,float a,float b){float t=abs(b-a);return mod(-x*sign(mod(floor(x/t),2.0)-0.5),t)+a;}
 vec2 ptc(float d,float a){return vec2(d*cos(a),d*sin(a));}
+
 vec3 hsv(vec3 c){vec4 K=vec4(0.0,-1.0/3.0,2.0/3.0,-1.0),p=mix(vec4(c.bg,K.ab),vec4(c.gb,K.rg),step(c.b,c.g)),q=mix(vec4(p.rga,c.r),vec4(c.r,p.gbr),step(p.r,c.r));float d=q.r-min(q.a,q.g),e=1e-10;return vec3(abs(q.b+(q.a-q.g)/(6.0*d+e)),d/(q.r+e),q.r);}
-vec3 rgb(vec3 c){vec4 K=vec4(1.0,0.66666,0.33333,3.0);vec3 p=abs(fract(c.rrr+K.rgb)*6.0-K.aaa);return c.b*mix(K.rrr,p-K.rrr,c.g);}"""
+vec3 hsv(f h, f s, f v) {return hsv(v3(h, s, v));};
+vec3 hsv(f h) {return hsv(v3(h, 1.0, 1.0));};
+
+vec3 rgb(vec3 c){vec4 K=vec4(1.0,0.66666,0.33333,3.0);vec3 p=abs(fract(c.rrr+K.rgb)*6.0-K.aaa);return c.b*mix(K.rrr,p-K.rrr,c.g);}
+vec3 rgb(f r, f g, f b){return rgb(v3(r, g, b));}
+vec3 rgb(f v){return rgb(v3(v));}
+"""
 
 vertex_shader = """\
 #version 330
@@ -38,6 +45,9 @@ def parse_shader(q, size):
 {q[:(l:=q.find('MAIN:'))]}\n
 out vec4 fragColor;
 vec3 func(vec2 p) {{
+    f x = p.x;
+    f y = p.y;
+    
     {q[l+5:]}
 }}
 void main() {{
