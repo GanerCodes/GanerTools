@@ -52,7 +52,7 @@ def get_forecast():
     d = t['hourly']
     data = [proc_dat(tuple(ops[i](a) for i, a in enumerate(v))) for v in list(zip(d['time'], d['temperature_2m'], d['precipitation'], d['cloudcover']))][:24*4]
     data = data[24:-12]
-    k = 20
+    k = 30
     return '\n'.join(''.join(s) for s in list(zip(*[data[i:i+k] for i in range(0, len(data), k)])))
 
 if __name__ == "__main__":
