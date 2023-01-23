@@ -1,7 +1,8 @@
 from downany import download
 from renderer import render
-import asyncio, requests, aiohttp, json, discord, random, os, re, io, threading
+import asyncio, datetime, requests, aiohttp, json, discord, random, os, re, io, threading
 from better_desmos_python import eqToPy
+from forecast import get_forecast
 
 url_regex = re.compile(
     r"(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?",
@@ -16,6 +17,7 @@ valid_users   = config['downloader_valid_users']
 discord_token = config['discord_token']
 access_token  = config['access_token']
 cookies_path  = config['cookies'] if 'cookies' in config else ''
+daily_channel = config['daily_channel']
 
 if save_path[-1] != '/': save_path = save_path + '/'
 bot = discord.Client()
@@ -40,6 +42,20 @@ def downloadProc(msg, link, args, move_folder = None):
 Download result "`{link[:50] + ('…' if len(link) > 49 else '')}`:"
 \t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j) if len(j) else 'No download results.'}"""))
 
+lords_prayer = """Our Father, which art in heaven,
+Hallowed be thy Name.
+Thy Kingdom come.
+Thy will be done in earth,
+As it is in heaven.
+Give us this day our daily bread.
+And forgive us our trespasses,
+As we forgive them that trespass against us.
+And lead us not into temptation,
+But deliver us from evil.
+For thine is the kingdom,
+The power, and the glory,
+For ever and ever.
+Amen."""
 async def processMsgQue():
     while True:
         while len(msgque) > 0:
@@ -50,12 +66,22 @@ async def processMsgQue():
                 print(e)
         await asyncio.sleep(2.5)
 
+async def continious_looper():
+    while True:
+        now = datetime.datetime.now()
+        if now.hour == 7 and now.minute == 30:
+            forecast = get_forecast()
+            channel = bot.get_channel(daily_channel)
+            await channel.send(f"```{forecast}```\n{lords_prayer}")
+        await asyncio.sleep(60)
+
 @bot.event
 async def on_ready():
     global rdy
     if not rdy:
         print("Ready")
         bot.loop.create_task(processMsgQue())
+        bot.loop.create_task(continious_looper())
         rdy = True
 
 @bot.event
