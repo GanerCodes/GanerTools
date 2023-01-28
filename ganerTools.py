@@ -69,7 +69,7 @@ async def processMsgQue():
 async def continious_looper():
     while True:
         now = datetime.datetime.now()
-        if now.hour == 7 and now.minute == 30:
+        if now.hour == 7 and now.minute == 15:
             forecast = get_forecast()
             channel = bot.get_channel(daily_channel)
             await channel.send(f"```{forecast}```\n{lords_prayer}")
