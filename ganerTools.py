@@ -20,7 +20,7 @@ cookies_path  = config['cookies'] if 'cookies' in config else ''
 daily_channel = config['daily_channel']
 
 if save_path[-1] != '/': save_path = save_path + '/'
-bot = discord.Client()
+bot = discord.Client(intents=discord.Intents.all())
 rdy, msgque = False, []
 
 splitDelims = lambda x, s: list(filter(None, x.split(s[0]))) if len(s) == 1 else splitDelims(s[-1].join(x.split(s[0])), s[1:])
