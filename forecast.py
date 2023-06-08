@@ -18,7 +18,7 @@ def get_forecast():
         if temp > 85:
             return '🔥'
         if temp > 75:
-            return '☀️'
+            return '🌞'
         if temp > 64:
             return '😊'
         if temp > 32:
@@ -39,9 +39,9 @@ def get_forecast():
     def conv_cloud(cloud):
         if cloud > 0.8:
             return '😔'
-        if cloud > 0.6:
+        if cloud > 0.5:
             return '😕'
-        if cloud > 0.3:
+        if cloud > 0.25:
             return '😐'
         return '😊'
     def proc_dat(data):
