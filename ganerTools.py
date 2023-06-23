@@ -42,7 +42,7 @@ def downloadProc(msg, link, args, move_folder = None):
 Download result "`{link[:50] + ('…' if len(link) > 49 else '')}`:"
 \t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j) if len(j) else 'No download results.'}"""))
 
-lords_prayer = """Our Father, which art in heaven,
+Lords_prayer = """Our Father, which art in heaven,
 Hallowed be thy Name.
 Thy Kingdom come.
 Thy will be done in earth,
@@ -72,7 +72,7 @@ async def continious_looper():
         if now.hour == 7 and now.minute == 15:
             forecast = get_forecast()
             channel = bot.get_channel(daily_channel)
-            await channel.send(f"```{forecast}```\n{lords_prayer}")
+            await channel.send(f"```{forecast}```\n{Lords_prayer}")
         await asyncio.sleep(60)
 
 @bot.event
