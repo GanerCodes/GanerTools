@@ -20,7 +20,7 @@ cookies_path  = config['cookies'] if 'cookies' in config else ''
 daily_channel = config['daily_channel']
 
 if save_path[-1] != '/': save_path = save_path + '/'
-bot = discord.Client()
+bot = discord.Client(intents=discord.Intents.all())
 rdy, msgque = False, []
 
 splitDelims = lambda x, s: list(filter(None, x.split(s[0]))) if len(s) == 1 else splitDelims(s[-1].join(x.split(s[0])), s[1:])
@@ -42,7 +42,7 @@ def downloadProc(msg, link, args, move_folder = None):
 Download result "`{link[:50] + ('…' if len(link) > 49 else '')}`:"
 \t{sep.join(f"{i[0]}: {convertPathToURL(i[2])}" for i in j) if len(j) else 'No download results.'}"""))
 
-lords_prayer = """Our Father, which art in heaven,
+Lords_prayer = """Our Father, which art in heaven,
 Hallowed be thy Name.
 Thy Kingdom come.
 Thy will be done in earth,
@@ -81,6 +81,7 @@ async def set_lights(mode):
 async def continuous_looper():
     p_t = None
     while True:
+<<<<<<< HEAD
         await asyncio.sleep(30)
         
         try:
@@ -99,6 +100,14 @@ async def continuous_looper():
                     await set_lights("dim")
         except Exception as e:
             print(f"Error in continious looper: {e}")
+=======
+        now = datetime.datetime.now()
+        if now.hour == 7 and now.minute == 15:
+            forecast = get_forecast()
+            channel = bot.get_channel(daily_channel)
+            await channel.send(f"```{forecast}```\n{Lords_prayer}")
+        await asyncio.sleep(60)
+>>>>>>> refs/remotes/origin/main
 
 @bot.event
 async def on_ready():
