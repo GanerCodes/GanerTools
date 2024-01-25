@@ -66,14 +66,39 @@ async def processMsgQue():
                 print(e)
         await asyncio.sleep(2.5)
 
-async def continious_looper():
+async def set_lights(mode):
+    match mode:
+        case "dim":
+            URLs = ("""https://brynic.ganer.xyz/call/fetch('https%3A%2F%2Fbrynic.ganer.xyz'%2C%20%7Bmethod%3A%20'POST'%2C%20mode%3A%20%22no-cors%22%2C%20body%3A%20%60%7B%22token%22%3A%22haha%22%2C%22uuid%22%3A%22all%22%2C%22mode%22%3A%7B%22modes%22%3A%5B%7B%22type%22%3A%22color%22%2C%22color%22%3A%5B0%2C0%2C10%5D%7D%5D%2C%22mask%22%3A%7B%22default%22%3A0%2C%22segments%22%3A%7B%7D%7D%2C%22shaders%22%3A%5B%5B%22brightnessDiv%22%2C%221%22%5D%5D%2C%22LED_COUNT%22%3A300%2C%22action%22%3A%22mode%22%2C%22duration%22%3A%22-1%22%2C%22isQued%22%3A%22false%22%7D%7D%60%7D)%3B""",
+                    """https://brynic.ganer.xyz/call/fetch('https%3A%2F%2Fbrynic.ganer.xyz'%2C%20%7Bmethod%3A%20'POST'%2C%20mode%3A%20%22no-cors%22%2C%20body%3A%20%60%7B%22token%22%3A%22haha%22%2C%22uuid%22%3A%222d265faa%22%2C%22mode%22%3A%7B%22modes%22%3A%5B%7B%22type%22%3A%22color%22%2C%22color%22%3A%5B0%2C0%2C0%5D%7D%5D%2C%22mask%22%3A%7B%22default%22%3A0%2C%22segments%22%3A%7B%7D%7D%2C%22shaders%22%3A%5B%5B%22brightnessDiv%22%2C%221%22%5D%5D%2C%22LED_COUNT%22%3A300%2C%22action%22%3A%22mode%22%2C%22duration%22%3A%22-1%22%2C%22isQued%22%3A%22false%22%7D%7D%60%7D)%3B""")
+        case "rainbow":
+            URLs = ("""https://brynic.ganer.xyz/call/fetch('https%3A%2F%2Fbrynic.ganer.xyz'%2C%20%7Bmethod%3A%20'POST'%2C%20mode%3A%20%22no-cors%22%2C%20body%3A%20%60%7B%22token%22%3A%22haha%22%2C%22uuid%22%3A%22all%22%2C%22mode%22%3A%7B%22modes%22%3A%5B%7B%22type%22%3A%22rainbow%22%2C%22speed%22%3A%22213%22%2C%22segCount%22%3A%223%22%2C%22direction%22%3A0%7D%5D%2C%22mask%22%3A%7B%22default%22%3A0%2C%22segments%22%3A%7B%7D%7D%2C%22shaders%22%3A%5B%5B%22brightnessDiv%22%2C%2210%22%5D%5D%2C%22LED_COUNT%22%3A300%2C%22action%22%3A%22mode%22%2C%22duration%22%3A%22-1%22%2C%22isQued%22%3A%22false%22%7D%7D%60%7D)%3B""", )
+        case _:
+            print(f"Unknown light mode: {mode}")
+            return
+    return [requests.get(URL) for URL in URLs]
+    
+async def continuous_looper():
+    p_t = None
     while True:
-        now = datetime.datetime.now()
-        if now.hour == 7 and now.minute == 15:
-            forecast = get_forecast()
-            channel = bot.get_channel(daily_channel)
-            await channel.send(f"```{forecast}```\n{lords_prayer}")
-        await asyncio.sleep(60)
+        await asyncio.sleep(30)
+        
+        try:
+            now = datetime.datetime.now()
+            t = now.hour, now.minute
+            if t == p_t: continue
+            p_t = t
+            
+            match t:
+                case (6, 0):
+                    forecast = get_forecast()
+                    channel = bot.get_channel(daily_channel)
+                    await channel.send(f"```{forecast}```\n{lords_prayer}")
+                    await set_lights("rainbow")
+                case (21, 45):
+                    await set_lights("dim")
+        except Exception as e:
+            print(f"Error in continious looper: {e}")
 
 @bot.event
 async def on_ready():
@@ -81,7 +106,7 @@ async def on_ready():
     if not rdy:
         print("Ready")
         bot.loop.create_task(processMsgQue())
-        bot.loop.create_task(continious_looper())
+        bot.loop.create_task(continuous_looper())
         rdy = True
 
 @bot.event
