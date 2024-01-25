@@ -81,7 +81,6 @@ async def set_lights(mode):
 async def continuous_looper():
     p_t = None
     while True:
-<<<<<<< HEAD
         await asyncio.sleep(30)
         
         try:
@@ -100,14 +99,6 @@ async def continuous_looper():
                     await set_lights("dim")
         except Exception as e:
             print(f"Error in continious looper: {e}")
-=======
-        now = datetime.datetime.now()
-        if now.hour == 7 and now.minute == 15:
-            forecast = get_forecast()
-            channel = bot.get_channel(daily_channel)
-            await channel.send(f"```{forecast}```\n{Lords_prayer}")
-        await asyncio.sleep(60)
->>>>>>> refs/remotes/origin/main
 
 @bot.event
 async def on_ready():
