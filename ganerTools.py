@@ -93,7 +93,7 @@ async def continuous_looper():
                 case (6, 0):
                     forecast = get_forecast()
                     channel = bot.get_channel(daily_channel)
-                    await channel.send(f"```{forecast}```\n{lords_prayer}")
+                    await channel.send(f"```{forecast}```\n{Lords_prayer}")
                     await set_lights("rainbow")
                 case (21, 45):
                     await set_lights("dim")
